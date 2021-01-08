@@ -1,0 +1,57 @@
+<html>
+<head>
+    <style>
+        #messages {
+            text-align: left;
+            width: 80%;
+            padding: 1em;
+            border: 1px solid black;
+        }
+        body{
+            margin-left: 10%;
+            align-content: center;
+        }
+
+        #message-body{
+            align: center;
+            width: 100%;
+        }
+    </style>
+    <title>Log Display</title>
+</head>
+<body>
+<div class="container">
+    <div id="messages" class="messages">
+        <table border="2">
+            <thead>
+            <tr>
+                <td>Time</td>
+                <td>Message</td>
+            </tr>
+            </thead>
+            <tbody id="message-body">
+
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+<script>
+    let messageWindow = document.getElementById("message-body");
+
+    let socket = new WebSocket("ws://localhost:8080/logs");
+    socket.onmessage = function (event) {
+        addMessageToWindow(`${event.data}`);
+    };
+
+    function addMessageToWindow(message) {
+        let now = new Date();
+        let h = now.getHours();
+        let m = now.getMinutes();
+        let s = now.getSeconds();
+
+        content = `<tr><td>${h}:${m}:${s}</td><td>${message}</td></tr>`
+        messageWindow.innerHTML += content;
+    }
+</script>
+</html>
